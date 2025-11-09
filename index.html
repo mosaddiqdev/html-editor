@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Editor - Online Code Editor with Live Preview</title>
+    <meta name="description" content="Free online HTML and CSS editor with live preview. Write code and see results instantly. No signup required. Perfect for learning and prototyping." />
+    <meta name="keywords" content="html editor, css editor, online code editor, live preview, web development, code playground" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://html-editor.vercel.app/" />
+    <meta property="og:title" content="HTML Editor - Online Code Editor with Live Preview" />
+    <meta property="og:description" content="Free online HTML and CSS editor with live preview. Write code and see results instantly." />
+    <meta property="og:image" content="https://html-editor.vercel.app/og-image.jpg" />
+    
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://html-editor.vercel.app/" />
+    <meta property="twitter:title" content="HTML Editor - Online Code Editor with Live Preview" />
+    <meta property="twitter:description" content="Free online HTML and CSS editor with live preview. Write code and see results instantly." />
+    <meta property="twitter:image" content="https://html-editor.vercel.app/og-image.jpg" />
+    
+    <link rel="canonical" href="https://html-editor.vercel.app/" />
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "HTML Editor",
+      "description": "Free online HTML and CSS editor with live preview",
+      "url": "https://html-editor.vercel.app/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Live Preview",
+        "HTML & CSS Editor",
+        "Monaco Editor",
+        "No Signup Required"
+      ]
+    }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+      
+      #preloader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      
+      .loader {
+        display: flex;
+        gap: 8px;
+      }
+      
+      .dot {
+        width: 8px;
+        height: 8px;
+        background: #3b82f6;
+        border-radius: 50%;
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      
+      .dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="preloader">
+      <div class="loader">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

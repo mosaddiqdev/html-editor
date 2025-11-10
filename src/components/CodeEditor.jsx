@@ -1,18 +1,92 @@
 import { useState, useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { FileCode2, FileType, Play } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 import styles from '../styles/CodeEditor.module.css';
 
 let themeConfigured = false;
 
 const CodeEditor = ({ htmlCode, cssCode, onHtmlChange, onCssChange, onRun, isMobile }) => {
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('html');
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
 
+  const syncEditorContent = (editor, monacoInstance, tab = activeTab) => {
+    if (!editor || !monacoInstance) return;
+
+    const model = editor.getModel();
+    if (!model) return;
+
+    const language = tab === 'html' ? 'html' : 'css';
+    const nextValue = tab === 'html' ? htmlCode : cssCode;
+
+    monacoInstance.editor.setModelLanguage(model, language);
+
+    if (editor.getValue() !== nextValue) {
+      const position = editor.getPosition();
+      editor.setValue(nextValue);
+      if (position) {
+        editor.setPosition(position);
+      }
+    }
+  };
+
   const configureTheme = (monaco) => {
     if (themeConfigured) return;
     
+    monaco.editor.defineTheme('canvas-dark', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [
+        { token: 'comment', foreground: '6b7280', fontStyle: 'italic' },
+        { token: 'keyword', foreground: '818cf8' },
+        { token: 'string', foreground: '34d399' },
+        { token: 'number', foreground: 'fbbf24' },
+        { token: 'type', foreground: 'a78bfa' },
+        { token: 'class', foreground: 'fbbf24' },
+        { token: 'function', foreground: 'a78bfa' },
+        { token: 'variable', foreground: 'e5e7eb' },
+        { token: 'tag', foreground: 'f87171' },
+        { token: 'attribute.name', foreground: 'fbbf24' },
+        { token: 'attribute.value', foreground: '34d399' },
+        { token: 'delimiter', foreground: '9ca3af' },
+      ],
+      colors: {
+        'editor.background': '#0a0a0a',
+        'editor.foreground': '#e5e7eb',
+        'editor.lineHighlightBackground': '#141414',
+        'editorLineNumber.foreground': '#4c4c4c',
+        'editorLineNumber.activeForeground': '#6b6b6b',
+        'editor.selectionBackground': '#6366f140',
+        'editor.inactiveSelectionBackground': '#6366f120',
+        'editorCursor.foreground': '#818cf8',
+        'editorWhitespace.foreground': '#1a1a1a',
+        'editorIndentGuide.background': '#1a1a1a',
+        'editorIndentGuide.activeBackground': '#6366f150',
+        'editorWidget.background': '#141414',
+        'editorWidget.foreground': '#e5e7eb',
+        'editorWidget.border': '#262626',
+        'editorSuggestWidget.background': '#141414',
+        'editorSuggestWidget.foreground': '#e5e7eb',
+        'editorSuggestWidget.border': '#262626',
+        'editorSuggestWidget.selectedBackground': '#1e1b4b',
+        'editorSuggestWidget.selectedForeground': '#c7d2fe',
+        'editorSuggestWidget.highlightForeground': '#818cf8',
+        'editorHoverWidget.background': '#141414',
+        'editorHoverWidget.foreground': '#e5e7eb',
+        'editorHoverWidget.border': '#262626',
+        'list.activeSelectionBackground': '#1e1b4b',
+        'list.activeSelectionForeground': '#c7d2fe',
+        'list.focusBackground': '#1e1b4b',
+        'list.focusForeground': '#c7d2fe',
+        'list.hoverBackground': '#1a1a1a',
+        'list.hoverForeground': '#a0a0a0',
+        'list.inactiveSelectionBackground': '#1a1a1a',
+        'list.inactiveSelectionForeground': '#a0a0a0',
+      }
+    });
+
     monaco.editor.defineTheme('canvas-light', {
       base: 'vs',
       inherit: true,
@@ -72,27 +146,19 @@ const CodeEditor = ({ htmlCode, cssCode, onHtmlChange, onCssChange, onRun, isMob
     editorRef.current = editor;
     monacoRef.current = monaco;
     configureTheme(monaco);
-    monaco.editor.setTheme('canvas-light');
+    monaco.editor.setTheme(theme === 'dark' ? 'canvas-dark' : 'canvas-light');
+    syncEditorContent(editor, monaco);
   };
 
   useEffect(() => {
+    if (monacoRef.current && editorRef.current) {
+      monacoRef.current.editor.setTheme(theme === 'dark' ? 'canvas-dark' : 'canvas-light');
+    }
+  }, [theme]);
+
+  useEffect(() => {
     if (editorRef.current && monacoRef.current) {
-      const model = editorRef.current.getModel();
-      if (model) {
-        const language = activeTab === 'html' ? 'html' : 'css';
-        const newValue = activeTab === 'html' ? htmlCode : cssCode;
-        const currentValue = editorRef.current.getValue();
-        
-        monacoRef.current.editor.setModelLanguage(model, language);
-        
-        if (currentValue !== newValue) {
-          const position = editorRef.current.getPosition();
-          editorRef.current.setValue(newValue);
-          if (position) {
-            editorRef.current.setPosition(position);
-          }
-        }
-      }
+      syncEditorContent(editorRef.current, monacoRef.current);
     }
   }, [activeTab, htmlCode, cssCode]);
 
@@ -151,7 +217,7 @@ const CodeEditor = ({ htmlCode, cssCode, onHtmlChange, onCssChange, onRun, isMob
           height="100%"
           defaultLanguage="html"
           defaultValue=""
-          theme="canvas-light"
+          theme={theme === 'dark' ? 'canvas-dark' : 'canvas-light'}
           onChange={(value) => {
             if (activeTab === 'html') {
               onHtmlChange(value || '');

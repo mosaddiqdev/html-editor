@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
-import { Code2 } from 'lucide-react';
+import { Code2, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../components/ThemeProvider';
 import CodeEditor from '../components/CodeEditor';
 import Preview from '../components/Preview';
 import styles from '../styles/Editor.module.css';
 
 const Editor = () => {
+  const { theme, toggleTheme } = useTheme();
   const [htmlCode, setHtmlCode] = useState('');
   const [cssCode, setCssCode] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -76,6 +78,9 @@ ${htmlCode}
           <Code2 className={styles.logoIcon} />
           <span>HTML Editor</span>
         </div>
+        <button className={styles.themeToggle} onClick={toggleTheme} title="Toggle theme">
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
       </header>
       
       <div className={styles.content}>

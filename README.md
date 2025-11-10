@@ -14,7 +14,7 @@ A minimal HTML & CSS editor with live preview. Built with React + Vite, featurin
 - **Tab-Based File System**: Switch between HTML and CSS files
 - **Live Preview**: Press **Run** to refresh the sandboxed iframe preview
 - **Preview Controls**: Run and open preview in a new tab
-- **Minimal Light UI**: Clean, daylight-friendly interface without flashy animations
+- **Minimal UI**: Clean, daylight-friendly interface without flashy animations
 - **Fully Responsive**: Mobile-first design approach
 
 ## Tech Stack

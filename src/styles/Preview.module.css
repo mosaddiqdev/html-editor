@@ -96,7 +96,7 @@
 
 .iframeWrapper {
   flex: 1;
-  background: #ffffff;
+  background: var(--color-bg-primary);
   overflow: hidden;
 }
 
